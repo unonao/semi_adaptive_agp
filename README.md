@@ -1,10 +1,23 @@
+
+データのダウンロード
+- https://github.com/GraphSAINT/GraphSAINT
+    - yelp
+    - reddit
+- amazon2m
+    - http://web.cs.ucla.edu/~chohsieh/data/
+    - https://github.com/pyyush/GraphML
+    - https://drive.google.com/drive/folders/1Tfn-yABlW5JheyYItyRyrMGtmQdYN7wm
+
+
+paper100m以外をダウンロード後、利用可能なデータ形式に変換する（convert_xxx.py）
+
 #  Approximate Graph Propagation
 
 Codes Contributors: Hanzhi Wang, Mingguo He
 <br/>
 
 ## Citation
-Please cite our paper when using the codes: 
+Please cite our paper when using the codes:
 
 ```
 @inproceedings{10.1145/3447548.3467243,
@@ -30,46 +43,46 @@ series = {KDD '21}
 
 
 ### Data:
-* All of the datasets used in the paper are publicly available at: 
+* All of the datasets used in the paper are publicly available at:
     * YouTube: https://snap.stanford.edu/data/bigdata/communities/com-youtube.ungraph.txt.gz
     * Orkut: https://snap.stanford.edu/data/bigdata/communities/com-orkut.ungraph.txt.gz
     * Friendster: https://snap.stanford.edu/data/bigdata/communities/com-friendster.ungraph.txt.gz
     * Twitter: http://data.law.di.unimi.it/webdata/twitter-2010/twitter-2010.graph
 
-    Additionally, we provide a toy dataset at *clustering-HKPR/dataset/*. 
+    Additionally, we provide a toy dataset at *clustering-HKPR/dataset/*.
 
-* Each dataset has a unique name called filelabel (e.g. *youtube*, *orkut*, *friendster* and *twitter*) . 
-* Please rename the raw datasets as *${filelabel}.txt* (e.g. *youtube.txt*, *orkut.txt*, *friendster.txt*, and *twitter.txt*) and put them in the directory: *clustering-HKPR/dataset/*. 
-* We assume that all raw datasets follow a consistent format: 
-    * The number of nodes is explicitly specified in the first line of the data file. 
-    * Each line following the second line indicates a **directed** edge in the graph. 
-* We assume that all undirected graphs have been converted to directed graphs that each undirected edge appears twice in the data file. 
-* We assume that the node index starts from $0$. The number of nodes is larger than the largest node index. 
-* The code converts the raw data to binary file in CSR format when reading raw graphs for the first time. The converted binary data is stored in the directory: *clustering-HKPR/dataset/${filelabel}/*. 
+* Each dataset has a unique name called filelabel (e.g. *youtube*, *orkut*, *friendster* and *twitter*) .
+* Please rename the raw datasets as *${filelabel}.txt* (e.g. *youtube.txt*, *orkut.txt*, *friendster.txt*, and *twitter.txt*) and put them in the directory: *clustering-HKPR/dataset/*.
+* We assume that all raw datasets follow a consistent format:
+    * The number of nodes is explicitly specified in the first line of the data file.
+    * Each line following the second line indicates a **directed** edge in the graph.
+* We assume that all undirected graphs have been converted to directed graphs that each undirected edge appears twice in the data file.
+* We assume that the node index starts from $0$. The number of nodes is larger than the largest node index.
+* The code converts the raw data to binary file in CSR format when reading raw graphs for the first time. The converted binary data is stored in the directory: *clustering-HKPR/dataset/${filelabel}/*.
 
 
 ### Query nodes:
 * When the code is invoked for the first time, it will automatically construct a query file containing 100 query nodes.
-* We name the query file as ${filelabel}.query and put it in the directory: *clustering-HKPR/query/*. 
+* We name the query file as ${filelabel}.query and put it in the directory: *clustering-HKPR/query/*.
 
 
 ### Execution:
-We include the fundamental commands in the script file: *clustering-HKPR/run_script.sh*. To automatically execute our codes, please use the following bash commands: 
+We include the fundamental commands in the script file: *clustering-HKPR/run_script.sh*. To automatically execute our codes, please use the following bash commands:
 ```
 bash run_script.sh
 ```
 
-Alternatively, our codes can be executed mannually. Specifically, to compile the codes: 
+Alternatively, our codes can be executed mannually. Specifically, to compile the codes:
 ```
 cd clustering-HKPR
 rm HKPR
 make
 ```
-To run powermethod: 
+To run powermethod:
 ```
 ./HKPR -d ./ -f youtube -algo powermethod -qn 10 -t 5
 ```
-To run AGP: 
+To run AGP:
 ```
 ./HKPR -d ./ -f youtube -algo AGP -e 1e-07 -qn 10 -t 5
 ```
@@ -84,22 +97,22 @@ To run AGP:
 
 
 ### Remark:
-* *clustering-HKPR/datatset/*: containing the datasets 
+* *clustering-HKPR/datatset/*: containing the datasets
 * *clustering-HKPR/query/*: containing the query files
-* *clustering-HKPR/result/*: containing the approximation results. 
+* *clustering-HKPR/result/*: containing the approximation results.
 
 <br/>
 
 ## II. Node Classficiation with GNN
 ### Requirements
-- CUDA  10.1
+- CUDA  10.1 → 11.1
 - python 3.8.5
 - pytorch 1.7.1
 - GCC 5.4.0
 - cython 0.29.21
 - eigency 1.77
 - numpy 1.18.1
-- torch-geometric 1.6.3 
+- torch-geometric 1.6.3
 - tqdm 4.56.0
 - ogb 1.2.4
 - [eigen 3.3.9] (https://gitlab.com/libeigen/eigen.git)
@@ -114,28 +127,26 @@ All of the datasets used in the paper are publicly available at:
 
 
 ### Compilation
-To compile the code, please run cython first, following  the commands shown as below. 
+To compile the code, please run cython first, following  the commands shown as below.
 ```
 python setup.py build_ext --inplace
 ```
 
 
 ### Execution
-* On Reddit dataset: 
+* On Reddit dataset:
 ```
 sh reddit.sh
 ```
-* On Yelp dataset: 
+* On Yelp dataset:
 ```
 sh yelp.sh
 ```
-* On Amazon2M dataset: 
+* On Amazon2M dataset:
 ```
 sh amazon2M.sh
 ```
-* On Papers100M dataset: 
+* On Papers100M dataset:
 ```
 sh papers100M.sh
 ```
-
-

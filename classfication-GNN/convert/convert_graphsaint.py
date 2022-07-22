@@ -16,7 +16,7 @@ def graphsave(adj,dir):
 	if(sp.isspmatrix_csr(adj)):
 		el=adj.indices
 		pl=adj.indptr
-		
+
 		EL=np.array(el,dtype=np.uint32)
 		PL=np.array(pl,dtype=np.uint32)
 
@@ -104,9 +104,8 @@ def graphsaint(datastr,dataset_name):
 
 if __name__ == "__main__":
 	#Your file storage path. For example, this is shown below.
-	datastr="/home/XXX/"
+	datastr="../data"
 
 	#dataset name, yelp or reddit
 	dataset_name='yelp'
 	graphsaint(datastr,dataset_name)
-

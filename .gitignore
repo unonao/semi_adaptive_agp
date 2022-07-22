@@ -1,0 +1,4 @@
+/wisteria
+/venv
+*/__pycache__
+*.out

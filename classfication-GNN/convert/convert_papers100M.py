@@ -1,3 +1,4 @@
+print('start script')
 import argparse
 from tqdm import tqdm
 import numpy as np
@@ -12,8 +13,9 @@ import numpy as np
 import tracemalloc
 import gc
 import struct
-    
+
 def papers100M():
+    print('start papers100M')
     dataset=PygNodePropPredDataset("ogbn-papers100M")
     split_idx = dataset.get_idx_split()
     data = dataset[0]
@@ -22,17 +24,19 @@ def papers100M():
     feat=np.array(feat,dtype=np.float64)
 
     #normalize feats
+    print('normalize feats')
     scaler = sklearn.preprocessing.StandardScaler()
     scaler.fit(feat)
     feat = scaler.transform(feat)
 
     #save feats
+    print('save feats')
     np.save('../data/papers100M_feat.npy',feat)
     del feat
     gc.collect()
 
     print('making the graph undirected')
-    data.edge_index=to_undirected(data.edge_index,data.num_nodes)
+    data.edge_index=to_undirected(data.edge_index,num_nodes=data.num_nodes)
     row,col=data.edge_index
 
     N=data.num_nodes

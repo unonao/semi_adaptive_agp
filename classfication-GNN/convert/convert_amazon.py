@@ -75,12 +75,12 @@ def load_graphsage_data(dataset_path, dataset_str, normalize=True):
   num_data = len(id_map)
 
   val_data = np.array(
-      [id_map[n] for n in graph_nx.nodes() if graph_nx.node[n]['val']],
+      [id_map[n] for n in graph_nx.nodes() if graph_nx.nodes[n]['val']],
       dtype=np.int32)
   test_data = np.array(
-      [id_map[n] for n in graph_nx.nodes() if graph_nx.node[n]['test']],
+      [id_map[n] for n in graph_nx.nodes() if graph_nx.nodes[n]['test']],
       dtype=np.int32)
-  is_train = np.ones((num_data), dtype=np.bool)
+  is_train = np.ones((num_data), dtype=bool)
   is_train[val_data] = False
   is_train[test_data] = False
   train_data = np.array([n for n in range(num_data) if is_train[n]],
@@ -108,7 +108,7 @@ def load_graphsage_data(dataset_path, dataset_str, normalize=True):
     train_ids = np.array([
         id_map[n]
         for n in graph_nx.nodes()
-        if not graph_nx.node[n]['val'] and not graph_nx.node[n]['test']
+        if not graph_nx.nodes[n]['val'] and not graph_nx.nodes[n]['test']
     ])
     train_feats = feats[train_ids]
     scaler = sklearn.preprocessing.StandardScaler()
@@ -148,5 +148,5 @@ def Amazon2M(datastr):
 if __name__ == "__main__":
 
   #Your file storage path. For example, this is shown below.
-  datastr="/home/XXX/"
+  datastr="../data"
   Amazon2M(datastr)
