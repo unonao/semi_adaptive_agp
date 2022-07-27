@@ -1,3 +1,4 @@
+import os
 import time
 import random
 import argparse
@@ -10,6 +11,8 @@ import torch.optim as optim
 import torch.utils.data as Data
 from model import GnnAGP
 from utils import load_inductive,mutilabel_f1
+
+print("os.cpu_count: ", os.cpu_count())
 
 # Training settings
 parser = argparse.ArgumentParser()
@@ -32,7 +35,7 @@ parser.add_argument('--bias', default='bn', help='bias.')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs.')
 parser.add_argument('--batch', type=int, default=30000, help='batch size.')
 parser.add_argument('--patience', type=int, default=100, help='patience.')
-parser.add_argument('--dev', type=int, default=1, help='device id.')
+parser.add_argument('--dev', type=int, default=None, help='device id.')
 args = parser.parse_args()
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -57,7 +60,7 @@ def evaluate(model,feats_val,labels_val):
         return f1_mic
 
 torch_dataset = Data.TensorDataset(features_train, labels[idx_train])
-loader = Data.DataLoader(dataset=torch_dataset,batch_size=args.batch,shuffle=True,num_workers=40)
+loader = Data.DataLoader(dataset=torch_dataset,batch_size=args.batch,shuffle=True,num_workers=min(9,os.cpu_count()))
 
 def train():
     model.train()
@@ -93,7 +96,7 @@ for epoch in range(args.epochs):
     loss_tra,train_ep = train()
     f1_val = validate()
     train_time+=train_ep
-    if(epoch+1)%20 == 0: 
+    if(epoch+1)%20 == 0:
         print(f'Epoch:{epoch+1:02d},'
             f'Train_loss:{loss_tra:.3f}',
             f'Valid_acc:{100*f1_val:.2f}%',
@@ -111,13 +114,9 @@ for epoch in range(args.epochs):
 
 test_acc = test()
 print(f"Train cost: {train_time:.2f}s")
-print('Load {}th epoch'.format(best_epoch))
-print(f"Test accuracy:{100*test_acc:.2f}%")
+print('Load {}th epoch'.format(best_epoch))rint(f"Test accuracy:{100*test_acc:.2f}%")
 
 memory_main = 1024 * resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/2**30
 memory=memory_main-memory_dataset
 print("Memory overhead:{:.2f}GB".format(memory))
 print("--------------------------")
-
-
-

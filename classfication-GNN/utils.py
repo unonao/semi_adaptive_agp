@@ -1,9 +1,57 @@
 import torch
 import gc
 import numpy as np
+import copy
 from sklearn.metrics import f1_score
 from torch.utils.data import Dataset
 from propagation import AGP
+
+
+def load_multi_inductive(datastr, params_list):
+	if datastr=="Amazon2M":
+		train_m=62382461; train_n=1709997
+		full_m=126167053; full_n=2449029
+	if datastr=='yelp':
+		train_m=7949403; train_n=537635
+		full_m=13954819; full_n=716847
+	if datastr=='reddit':
+		train_m=10907170; train_n=153932
+		full_m=23446803; full_n=232965
+	py_agp=AGP()
+	raw_features_train=np.load('data/'+datastr+'_train_feat.npy')
+	raw_features =np.load('data/'+datastr+'_feat.npy')
+	print('raw_features train:', raw_features_train.shape)
+	print('raw_features:', raw_features.shape)
+	features_train = np.tile(raw_features_train, (len(params_list), 1, 1))
+	features = np.tile(raw_features, (len(params_list), 1, 1))
+	print("--------------------------")
+	for i, params in enumerate(params_list):
+		print(params)
+		agp_alg = params['agp_alg']
+		L = params['L']
+		rmax = params['rmax']
+		alpha = params['alpha']
+		t = params['ti']
+		print("For train features propagation:")
+		_=py_agp.agp_operation(datastr+'_train',agp_alg,train_m,train_n,L,rmax,alpha,t,features_train[i,:,:])
+		print("For full features propagation:")
+		memory_dataset=py_agp.agp_operation(datastr+'_full',agp_alg,full_m,full_n,L,rmax,alpha,t,features[i,:,:])
+		print("--------------")
+
+	features_train = torch.FloatTensor(features_train)
+	features = torch.FloatTensor(features)
+	data = np.load("data/"+datastr+"_labels.npz")
+	labels = data['labels']
+	idx_train = data['idx_train']
+	idx_val = data['idx_val']
+	idx_test = data['idx_test']
+	labels = torch.LongTensor(labels)
+	idx_train = torch.LongTensor(idx_train)
+	idx_val = torch.LongTensor(idx_val)
+	idx_test = torch.LongTensor(idx_test)
+
+	return features_train,features,labels,idx_train,idx_val,idx_test,memory_dataset
+
 
 def load_inductive(datastr,agp_alg,alpha,t,rmax,L):
 	if datastr=="Amazon2M":
@@ -20,7 +68,7 @@ def load_inductive(datastr,agp_alg,alpha,t,rmax,L):
 	print("For train features propagation:")
 	features_train=np.load('data/'+datastr+'_train_feat.npy')
 	_=py_agp.agp_operation(datastr+'_train',agp_alg,train_m,train_n,L,rmax,alpha,t,features_train)
-	
+
 	features =np.load('data/'+datastr+'_feat.npy')
 	print("--------------------------")
 	print("For full features propagation:")
@@ -37,13 +85,13 @@ def load_inductive(datastr,agp_alg,alpha,t,rmax,L):
 	idx_train = torch.LongTensor(idx_train)
 	idx_val = torch.LongTensor(idx_val)
 	idx_test = torch.LongTensor(idx_test)
-	
+
 	return features_train,features,labels,idx_train,idx_val,idx_test,memory_dataset
 
 def load_transductive(datastr,agp_alg,alpha,t,rmax,L):
 	if(datastr=="papers100M"):
 		m=3339184668; n=111059956
-	
+
 	py_agp=AGP()
 	print("Load graph and initialize! It could take a few minutes...")
 	features =np.load('data/'+datastr+'_feat.npy')

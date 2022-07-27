@@ -74,7 +74,7 @@ double Agp::agp_operation(string dataset,string agp_alg,uint mm,uint nn,int LL,d
         Du_a[i]=pow(du,1-rrr);
         Du_b[i]=pow(du,rrr);
     }
-    
+
     for(int i=0; i<dimension; i++)
     {
         for(uint j=0; j<n; j++)
@@ -86,10 +86,12 @@ double Agp::agp_operation(string dataset,string agp_alg,uint mm,uint nn,int LL,d
         }
     }
 
-    struct timeval t_start,t_end;
+    //struct timeval t_start,t_end;
+    struct timespec t_start,t_end;
     double timeCost;
     clock_t start_t, end_t;
-    gettimeofday(&t_start,NULL);
+    //gettimeofday(&t_start,NULL);
+    clock_gettime(CLOCK_MONOTONIC, &t_start);
 
     cout<<"Begin propagation..."<<endl;
     int ti,start;
@@ -122,8 +124,10 @@ double Agp::agp_operation(string dataset,string agp_alg,uint mm,uint nn,int LL,d
     vector<thread>().swap(threads);
     end_t = clock();
     double total_t = (double)(end_t - start_t) / CLOCKS_PER_SEC;
-    gettimeofday(&t_end, NULL);
-    timeCost = t_end.tv_sec - t_start.tv_sec + (t_end.tv_usec - t_start.tv_usec)/1000000.0;
+    //gettimeofday(&t_end, NULL);
+    clock_gettime(CLOCK_MONOTONIC, &t_end);
+    //timeCost = t_end.tv_sec - t_start.tv_sec + (t_end.tv_usec - t_start.tv_usec)/1000000.0;
+    timeCost = t_end.tv_sec - t_start.tv_sec + (t_end.tv_nsec - t_start.tv_nsec)/1e9;
     cout<<"The propagation time: "<<timeCost<<" s"<<endl;
     cout<<"The clock time : "<<total_t<<" s"<<endl;
     double dataset_size=(double)(((long long)m+n)*4+(long long)n*dimension*8)/1024.0/1024.0/1024.0;

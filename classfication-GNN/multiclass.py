@@ -1,3 +1,4 @@
+import os
 import time
 import random
 import argparse
@@ -10,6 +11,8 @@ import torch.optim as optim
 import torch.utils.data as Data
 from model import GnnAGP
 from utils import load_inductive,muticlass_f1
+
+print("os.cpu_count: ", os.cpu_count())
 
 # Training settings
 parser = argparse.ArgumentParser()
@@ -32,7 +35,7 @@ parser.add_argument('--bias', default='bn', help='bias.')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs.')
 parser.add_argument('--batch', type=int, default=100000, help='batch size.')
 parser.add_argument('--patience', type=int, default=100, help='patience.')
-parser.add_argument('--dev', type=int, default=1, help='device id.')
+parser.add_argument('--dev', type=int, default=None, help='device id.')
 args = parser.parse_args()
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -50,13 +53,13 @@ optimizer = optim.Adam(model.parameters(), lr=args.lr, weight_decay=args.weight_
 loss_fn = nn.CrossEntropyLoss()
 
 torch_dataset = Data.TensorDataset(features_train, labels[idx_train])
-loader = Data.DataLoader(dataset=torch_dataset,batch_size=args.batch,shuffle=True,num_workers=40)
+loader = Data.DataLoader(dataset=torch_dataset,batch_size=args.batch,shuffle=True,num_workers=min(9,os.cpu_count()))
 
 def train():
     model.train()
     loss_list = []
     time_epoch = 0
-    
+
     for step, (batch_x, batch_y) in enumerate(loader):
         batch_x = batch_x.cuda(args.dev)
         batch_y = batch_y.cuda(args.dev)
@@ -85,7 +88,7 @@ def test():
         output = model(features[idx_test].cuda(args.dev))
         micro_test = muticlass_f1(output, labels[idx_test])
         return micro_test.item()
-    
+
 train_time = 0
 bad_counter = 0
 best = 0
@@ -122,6 +125,3 @@ memory_main = 1024 * resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/2**30
 memory=memory_main-memory_dataset
 print("Memory overhead:{:.2f}GB".format(memory))
 print("--------------------------")
-
-
-

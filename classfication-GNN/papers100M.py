@@ -35,7 +35,7 @@ parser.add_argument('--bias', default='none', help='bias.')
 parser.add_argument('--epochs', type=int, default=1000, help='number of epochs.')
 parser.add_argument('--batch', type=int, default=10000, help='batch size.')
 parser.add_argument('--patience', type=int, default=50, help='patience.')
-parser.add_argument('--dev', type=int, default=1, help='device id.')
+parser.add_argument('--dev', type=int, default=None, help='device id.')
 args = parser.parse_args()
 random.seed(args.seed)
 np.random.seed(args.seed)
@@ -126,7 +126,7 @@ for epoch in range(args.epochs):
 	loss_tra,train_ep = train(model,args.dev,train_loader,optimizer)
 	f1_val = validate(model, args.dev, valid_loader, evaluator)
 	train_time+=train_ep
-	if(epoch+1)%20 == 0: 
+	if(epoch+1)%20 == 0:
 		print(f'Epoch:{epoch+1:02d},'
 			f'Train_loss:{loss_tra:.3f}',
 			f'Valid_acc:{100*f1_val:.2f}%',
@@ -151,4 +151,3 @@ memory_main = 1024 * resource.getrusage(resource.RUSAGE_SELF).ru_maxrss/2**30
 memory=memory_main-memory_dataset
 print("Memory overhead:{:.2f}GB".format(memory))
 print("--------------------------")
-
