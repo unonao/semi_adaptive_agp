@@ -1,0 +1,22 @@
+dataset: "reddit"
+seed: 20159
+agp:
+  - agp_alg: "gdc_agp"
+    alpha: 0.2
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 2
+  - agp_alg: "gdc_agp"
+    alpha: 0.2
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4
+lr: 0.0001
+dropout: 0.3
+hidden: 2048
+batch: 10000
+weight_decay: 0
+layer: 4
+bias: 'bn'
+epochs: 1000
+patience: 100

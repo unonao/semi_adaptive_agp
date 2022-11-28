@@ -1,0 +1,22 @@
+dataset: "reddit"
+seed: 20159
+agp:
+  - agp_alg: "appnp_agp"
+    alpha: 0.3
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+  - agp_alg: "appnp_agp"
+    alpha: 0.7
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+lr: 0.0001
+dropout: 0.3
+hidden: 2048
+batch: 10000
+weight_decay: 0
+layer: 4
+bias: 'bn'
+epochs: 1000
+patience: 100

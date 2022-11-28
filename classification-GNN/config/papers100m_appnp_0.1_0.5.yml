@@ -1,0 +1,22 @@
+dataset: "papers100M"
+seed: 20159
+agp:
+  - agp_alg: "appnp_agp"
+    alpha: 0.1
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+  - agp_alg: "appnp_agp"
+    alpha: 0.5
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+lr: 0.01
+dropout: 0.3
+hidden: 2048
+batch: 10000
+weight_decay: 0
+layer: 3
+bias: 'bn'
+epochs: 1000
+patience: 50

@@ -1,0 +1,22 @@
+dataset: "yelp"
+seed: 20159
+agp:
+  - agp_alg: "gdc_agp"
+    alpha: 0.1
+    rmax: 0.0000005 #5e-7
+    L: 20
+    ti: 0.5
+  - agp_alg: "gdc_agp"
+    alpha: 0.1
+    rmax: 0.0000005 #5e-7
+    L: 20
+    ti: 8
+lr: 0.01
+dropout: 0.1
+hidden: 2048
+batch: 30000
+weight_decay: 0
+layer: 4
+bias: 'bn'
+epochs: 1000
+patience: 100

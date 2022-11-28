@@ -1,15 +1,8 @@
 
-データのダウンロード
-- https://github.com/GraphSAINT/GraphSAINT
-    - yelp
-    - reddit
-- amazon2m
-    - http://web.cs.ucla.edu/~chohsieh/data/
-    - https://github.com/pyyush/GraphML
-    - https://drive.google.com/drive/folders/1Tfn-yABlW5JheyYItyRyrMGtmQdYN7wm
 
+通常：(頂点数、agp特徴量次元)
+semi-adaptive版：（頂点数、agp数、agp特徴量次元）
 
-paper100m以外をダウンロード後、利用可能なデータ形式に変換する（convert_xxx.py）
 
 #  Approximate Graph Propagation
 

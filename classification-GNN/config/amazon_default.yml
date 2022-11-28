@@ -1,0 +1,22 @@
+dataset: "Amazon2M"
+seed: 20159
+agp:
+  - agp_alg: "appnp_agp"
+    alpha: 0.1
+    rmax: 0.00000001 #1e-8
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+  - agp_alg: "appnp_agp"
+    alpha: 0.9
+    rmax: 0.00000001 #1e-8
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+lr: 0.01
+dropout: 0.1
+hidden: 1024
+batch: 100000
+weight_decay: 0
+layer: 4
+bias: 'bn'
+epochs: 1000
+patience: 100

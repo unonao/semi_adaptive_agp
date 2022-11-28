@@ -1,0 +1,22 @@
+dataset: "Cora"
+seed: 0
+agp:
+  - agp_alg: "appnp_agp"
+    alpha: 0.1
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+  - agp_alg: "appnp_agp"
+    alpha: 0.9
+    rmax: 0.0000001 #1e-7
+    L: 20
+    ti: 4 # appnp_agpでは不使用
+lr: 0.002
+dropout: 0.3
+hidden: 64
+batch: 10000
+weight_decay: 0.0005
+layer: 2
+bias: 'bn'
+epochs: 1000
+patience: 100
